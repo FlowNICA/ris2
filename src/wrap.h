@@ -374,6 +374,7 @@ public:
     for( auto name : objects ){
       auto weight = !weights.empty() ? weights.at(i) : 1.0;
       averaging_objects_.push_back( MakeDataContainer(file_in.get(), name)*weight );
+      ++i;
     }
   }
   Systematics<Qn::DataContainerStatCalculate>( const Systematics<Qn::DataContainerStatCalculate>& ) = default;
