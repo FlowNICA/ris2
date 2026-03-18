@@ -180,6 +180,10 @@ public:
     lines_.emplace_back(line);
     return *this;
   }
+  Picture& AddImage( TASImage* img ){
+    images_.emplace_back(img);
+    return *this;
+  }
   /// @brief Plots all of the added objects
   TPad* Print(){
     pad_->cd();
@@ -189,6 +193,7 @@ public:
     DrawLegends();
     DrawFunctions();
     DrawLines();
+    DrawImages();
     if( x_axis_.log_ )
       pad_->SetLogx();
     if( y_axis_.log_ )
@@ -267,6 +272,11 @@ private:
     for( auto& l : lines_ )
       l->Draw("same");
   }
+  void DrawImages(){
+    for ( auto& img : images_ ){
+      img->Draw("same");
+    }
+  }
   
   Axis x_axis_;
   Axis y_axis_;
@@ -280,6 +290,7 @@ private:
   std::vector< std::unique_ptr<TF1> > functions_{};
   std::vector< std::unique_ptr<TLine> > lines_{};
   std::vector<std::unique_ptr<TLegend>> legends_;
+  std::vector<std::unique_ptr<TASImage>> images_;
 };
 
 /// @brief Class for managing the sub-plots and save the plotted data to a file.
@@ -339,6 +350,7 @@ public:
     canvas_->Print( save_name.c_str() );
     return *this;
   }
+  Plot& cd() { canvas_->cd(); return *this; }
 protected:
   std::vector<Picture> plots_;
   std::unique_ptr<TCanvas> canvas_{};
