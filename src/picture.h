@@ -53,9 +53,11 @@ struct Text{
   Text& SetText(std::string text){ text_ = std::move(text); return *this; }
   /// @brief Sets the position of the text. {x1, y1} --- position of the  top right point
   Text& SetPosition(std::array<double, 2> pos){ position_ = std::move(pos); return *this; }
+  Text& SetFont(int font) { font_ = font; return *this; }
   double size_;
   std::string text_;
   std::array<double, 2> position_;
+  int font_;
 };
 
 class FileManager{
@@ -118,9 +120,9 @@ public:
     auto graph =  wrap.ReleaseResult();
     if( !graph ) return *this;
     if( style.marker_ >= 0 )
-      graph_stack_->Add( wrap.ReleaseSystematics(), "P+2" ); 
+      graph_stack_->Add( wrap.ReleaseSystematics(), "2" ); 
     if( style.marker_ < 0 )
-      graph_stack_->Add( wrap.ReleaseSystematics(), "L+2" ); 
+      graph_stack_->Add( wrap.ReleaseSystematics(), "2" ); 
     return *this; 
   }
   /// @brief Adds the vector of the Wrap<T> to the plot
@@ -245,6 +247,7 @@ private:
       vec_tlatexs_.emplace_back( new TLatex( text.position_.at(0), text.position_.at(1), text.text_.c_str() ) );
       vec_tlatexs_.back()->SetNDC();
       vec_tlatexs_.back()->SetTextSize( text.size_ );
+      vec_tlatexs_.back()->SetTextFont(text.font_);
       vec_tlatexs_.back()->Draw("same");
     }
   }
